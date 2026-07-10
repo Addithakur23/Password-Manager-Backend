@@ -6,11 +6,28 @@ import cors from "cors"
 const app = express()
 const port = 3000
 app.use(express.json())
-dotenv.config()
-app.use(cors())
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 
 mongoose.connect(process.env.MONGO_URI)
 
+const allowedOrigins = [
+  'https://password-manager-seven-flame.vercel.app/',
+  'https://www.password-manager-seven-flame.vercel.app/'
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(cors({
+  origin: 'https://{your_vercel_domain}',
+  credentials: true
+}));
 app.post('/api/password', async (req, res) => {
      console.log(req.body)
     const newPassword=new password(req.body)
