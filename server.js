@@ -14,8 +14,7 @@ app.use(cors({
 mongoose.connect(process.env.MONGO_URI)
 
 const allowedOrigins = [
-  'https://password-manager-seven-flame.vercel.app/',
-  'https://www.password-manager-seven-flame.vercel.app/'
+  'https://password-manager-seven-flame.vercel.app/'
 ];
 
 app.use(cors({
