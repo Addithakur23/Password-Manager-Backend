@@ -25,7 +25,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(cors({
-  origin: 'https://{your_vercel_domain}',
+  origin: 'https://www.password-manager-seven-flame.vercel.app/',
   credentials: true
 }));
 app.post('/api/password', async (req, res) => {
