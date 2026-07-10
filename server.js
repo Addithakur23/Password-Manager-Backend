@@ -5,28 +5,34 @@ import  dotenv  from "dotenv"
 import cors from "cors"
 const app = express()
 const port = 3000
+
 app.use(express.json())
+
+const allowedOrigins = [
+  'https://password-manager-seven-flame.vercel.app',
+  'https://www.password-manager-seven-flame.vercel.app'
+]
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}));
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true)
+
+    const normalizedOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin
+    if (allowedOrigins.includes(normalizedOrigin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
+
+app.options('*', cors())
 
 mongoose.connect(process.env.MONGO_URI)
 
-const allowedOrigins = [
-  'https://password-manager-seven-flame.vercel.app/'
-];
-
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.use(cors({
-  origin: 'https://www.password-manager-seven-flame.vercel.app/',
-  credentials: true
-}));
 app.post('/api/password', async (req, res) => {
      console.log(req.body)
     const newPassword=new password(req.body)
